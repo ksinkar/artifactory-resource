@@ -39,7 +39,7 @@ args_url="$endpoint/api/storage$repository$folder"
 
 args_security=
 
-[ -n "$username" ] && args_security="-u $username";
+[ -n "$username" ] && args_security="-H 'X-JFrog-Art-Api";
 [ -n "$password" ] && args_security="$args_security:$password";
 trueValue="true"
 [ -n "$skip_ssl_verification" ] && [ "${skip_ssl_verification,,}" = "${trueValue,,}" ] && args_security="$args_security -k";
