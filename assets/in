@@ -34,6 +34,9 @@ skip_download="$(jq -r '.params.skip_download // false' < $payload)"
 
 version=$(jq -r '.version.version // ""' < $payload)
 
+## curl -u<USERNAME>:<PASSWORD> -H 'X-JFrog-Art-Api:<API_KEY>' -T <PATH_TO_FILE> "https://devstack.vwgroup.com/artifactory/wevcf-generic/<TARGET_FILE_PATH>"
+## curl -T <PATH_TO_FILE> "https://devstack.vwgroup.com/artifactory/wevcf-generic/<TARGET_FILE_PATH>"
+
 if [ -z "$endpoint" ]; then
   echo "invalid payload (missing endpoint)"
   exit 1
@@ -60,8 +63,12 @@ args_url="$endpoint/api/storage$repository$folder"
 
 args_security=
 
-[ -n "$username" ] && args_security="-u $username";
-[ -n "$password" ] && args_security="$args_security:$password";
+if [[ -n "$api_key" ]]; then
+    args_security="-H 'X-JFrog-Art-Api:$api_key'"
+else
+    [ -n "$username" ] && args_security="-u $username";
+    [ -n "$password" ] && args_security="$args_security:$password";
+fi
 trueValue="true"
 [ -n "$skip_ssl_verification" ] && [ "${skip_ssl_verification,,}" = "${trueValue,,}" ] && args_security="$args_security -k";
 
@@ -95,4 +102,3 @@ else
 fi
 
 echo $file_json | jq '.[].version | {version: {version: .}}' >&3
-
