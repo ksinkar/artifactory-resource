@@ -24,6 +24,7 @@ endpoint=$(jq -r '.source.endpoint // ""' < $payload)
 regex=$(jq -r '.source.regex // ""' < $payload)
 username=$(jq -r '.source.username // ""' < $payload)
 password=$(jq -r '.source.password // ""' < $payload)
+api_key=$(jq -r '.source.api_key // ""' < $payload)
 skip_ssl_verification=$(jq -r '.source.skip_ssl_verification // ""' < $payload)
 
 repository=$(jq -r '.source.repository // ""' < $payload)
